@@ -9,19 +9,32 @@ import java.util.List;
 public class TransformationHelper {
 
     private static final String error = "Wystapil blad w polaczeniu z baza danych, za utrudnienia przepraszamy.";
+    private static final String errorHtml = "<div class=\"alert alert-danger\" role=\"alert\">%s</div>";
+    private static final String errorJson = "{\"type\": \"error\", \"data\":\"%s\"}";
 
-    public static String getJsonResponse(ResultSet resultSet, String column_name) {
+    private static final String answerJson = "{\"type\": \"open\", \"data\": [%s]}";
+    private static final String formatList = "\"%s\",";
+
+    private static final String startHeader = "<thead>\n<tr>\n";
+    private static final String HeaderToBody = "</tr>\n</thead>\n<tbody>\n";
+    private static final String stopBody = "</tbody>\n";
+
+    private static final String rowHeader = "<th scope=\"col\">%s</th>\n";
+    private static final String row = "<td>%s</td>\n";
+
+    private static final String startRow = "<tr>\n";
+    private static final String stopRow = "</tr>\n";
+
+    public static String getJsonResponse(ResultSet resultSet, String columnName) {
         StringBuilder response = new StringBuilder();
 
         try {
-            while (resultSet.next()) {
-                response.append(String.format("\"%s\",", resultSet.getString(column_name)));
-            }
+            prepareListForJson(response, resultSet, columnName);
         } catch (SQLException e) {
-            return String.format("{\"type\": \"error\", \"data\":\"%s\"}", e);
+            return String.format(errorJson, e);
         }
 
-        return String.format("{\"type\": \"open\", \"data\": [%s]}", subLastComma(response.toString()));
+        return String.format(answerJson, subLastComma(response.toString()));
     }
 
     public static String getTable(ResultSet resultSet) {
@@ -30,26 +43,7 @@ public class TransformationHelper {
 
         try {
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
-            response.append("<thead>\n<tr>\n");
-
-            for (int i = 1; i <= resultSetMetaData.getColumnCount(); i++) {
-                String columnName = resultSetMetaData.getColumnName(i);
-                response.append(String.format("<th scope=\"col\">%s</th>\n", columnName));
-                list.add(columnName);
-            }
-            response.append("</tr>\n</thead>\n<tbody>\n");
-
-            while (resultSet.next()) {
-                response.append("<tr>\n");
-
-                for (String column : list) {
-                    response.append(String.format("<td>%s</td>\n", resultSet.getString(column)));
-                }
-
-                response.append("</tr>\n");
-            }
-
-            response.append("</tbody>\n");
+            prepareTable(response, resultSet, resultSetMetaData, list);
         } catch (SQLException e) {
             return getErrorMessage();
         }
@@ -57,6 +51,42 @@ public class TransformationHelper {
         return response.toString();
     }
 
+    private static void prepareTable(StringBuilder response, ResultSet resultSet, ResultSetMetaData resultSetMetaData, List<String> list) throws SQLException {
+        response.append(startHeader);
+        prepareHeader(resultSetMetaData, response, list);
+        response.append(HeaderToBody);
+
+        prepareRows(resultSet, response, list);
+        response.append(stopBody);
+    }
+
+    private static void prepareHeader(ResultSetMetaData resultSetMetaData, StringBuilder response, List<String> list) throws SQLException {
+        for (int i = 1; i <= resultSetMetaData.getColumnCount(); i++) {
+            String columnName = resultSetMetaData.getColumnName(i);
+            response.append(String.format(rowHeader, columnName));
+            list.add(columnName);
+        }
+    }
+
+    private static void prepareRows(ResultSet resultSet, StringBuilder response, List<String> list) throws SQLException {
+        while (resultSet.next()) {
+            response.append(startRow);
+
+            for (String column : list) {
+                response.append(String.format(row, resultSet.getString(column)));
+            }
+
+            response.append(stopRow);
+        }
+    }
+
+    private static void prepareListForJson(StringBuilder response, ResultSet resultSet, String columnName) throws SQLException {
+        while (resultSet.next()) {
+            response.append(String.format(formatList, resultSet.getString(columnName)));
+        }
+    }
+
+    // https://stackoverflow.com/questions/7438612/how-to-remove-the-last-character-from-a-string
     private static String subLastComma(String str) {
         if (str != null && str.length() > 0 && str.charAt(str.length() - 1) == ',') {
             str = str.substring(0, str.length() - 1);
@@ -65,6 +95,6 @@ public class TransformationHelper {
     }
 
     private static String getErrorMessage() {
-        return String.format("<div class=\"alert alert-danger\" role=\"alert\">%s</div>", error);
+        return String.format(errorHtml, error);
     }
 }
