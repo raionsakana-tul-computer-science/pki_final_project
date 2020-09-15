@@ -48,3 +48,7 @@ function prepareSelectList(json, id) {
 
     document.getElementById(id).innerHTML = content;
 }
+
+function viewTable() {
+    window.location.href = "/view"
+}

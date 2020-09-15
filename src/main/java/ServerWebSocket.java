@@ -22,7 +22,7 @@ public class ServerWebSocket {
     }
 
 //    @OnMessage
-//    public void onMessage(Session session, Message message) throws IOException {
+//    public void onMessage(Session session) throws IOException {
 //        // Handle new messages
 //    }
 //
