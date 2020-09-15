@@ -6,10 +6,10 @@ if (webSocket !== undefined && webSocket.readyState !== WebSocket.CLOSED) {
     showModalResponse("WebSocket aktualnie otwarty.");
 } else {
     // heroku remote
-    // webSocket = new WebSocket("wss://pki-project-patryk-janowski.herokuapp.com/app");
+    webSocket = new WebSocket("wss://pki-project-patryk-janowski.herokuapp.com/app");
 
     // heroku local web
-    webSocket = new WebSocket("ws://localhost:5000/app");
+    // webSocket = new WebSocket("ws://localhost:5000/app");
 }
 
 webSocket.onmessage = function (event) {
@@ -50,7 +50,9 @@ function prepareSelectList(json, id) {
 }
 
 function viewTable() {
-    window.location.href = "/view"
+    var e = document.getElementById("table-list");
+    var value = e.options[e.selectedIndex].value;
+    window.location.href = "/view?table_name=" + value;
 }
 
 function backToHomePage() {

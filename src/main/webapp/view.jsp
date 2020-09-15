@@ -10,10 +10,10 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <link rel="stylesheet" href="css/style.css">
 
-        <title>PKI - projekt końcowy</title>
+        <title>${table_name}: PKI - projekt końcowy</title>
     </head>
     <body>
-        ${table}<br><br>
+        <table class="table table-hover">${table}</table><br><br>
         <button type="button" class="btn btn-primary" onclick="backToHomePage()">Powrót do strony głównej</button>
 
         <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="alert-modal">
