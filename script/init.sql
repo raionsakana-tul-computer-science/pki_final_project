@@ -32,3 +32,13 @@ VALUES
 	, ('Poświętne pod Pilicą', 26315)
 	, ('Żarnów', 26330)
 ;
+
+INSERT INTO
+	"user" (name, last_name, post_id)
+VALUES
+	('Patryk', 'Janowski', 1)
+	, ('Adam', 'Michalak', 3)
+	, ('Eliza', 'Faust', 2)
+	, ('Stefania', 'Górzyńska', 2)
+	, ('Kazimiera', 'Kratka', 4)
+;
