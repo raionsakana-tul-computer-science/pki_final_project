@@ -23,8 +23,9 @@ public class ViewServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String parameter = request.getParameter(this.tableName);
 
-        Connection connection = databaseTools.getConnection();
-        String out = TransformationHelper.getTable(databaseTools.executeQuery(connection, getQuery(parameter)));
+        Connection connection = this.databaseTools.getConnection();
+        String out = TransformationHelper.getTable(this.databaseTools.executeQuery(connection, getQuery(parameter)));
+        this.databaseTools.closeConnection(connection);
 
         request.setAttribute(this.tableName, parameter);
         request.setAttribute("table", out);

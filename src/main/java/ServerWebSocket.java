@@ -7,18 +7,22 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 
+// https://www.baeldung.com/java-websockets
 @ServerEndpoint(value = "/app")
 public class ServerWebSocket {
 
     private final DatabaseTools databaseTools = new DatabaseTools();
     private final String getTablesNamesQuery = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'";
-    private Connection connection;
 
     @OnOpen
     public void onOpen(Session session) throws IOException {
-        this.connection = databaseTools.getConnection();
-        ResultSet resultSet = databaseTools.executeQuery(this.connection, this.getTablesNamesQuery);
-        session.getBasicRemote().sendText(TransformationHelper.getJsonResponse(resultSet, "table_name"));
+        Connection connection = this.databaseTools.getConnection();
+        ResultSet resultSet = this.databaseTools.executeQuery(connection, this.getTablesNamesQuery);
+
+        String response = TransformationHelper.getJsonResponse(resultSet, "table_name");
+        this.databaseTools.closeConnection(connection);
+        
+        session.getBasicRemote().sendText(response);
     }
 
 //    @OnMessage
