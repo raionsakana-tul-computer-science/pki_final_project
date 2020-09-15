@@ -14,7 +14,7 @@
     </head>
     <body>
         ${table}<br><br>
-        <button type="button" class="btn btn-primary">Powrót do strony głównej</button>
+        <button type="button" class="btn btn-primary" onclick="backToHomePage()">Powrót do strony głównej</button>
 
         <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="alert-modal">
             <div class="modal-dialog modal-sm">

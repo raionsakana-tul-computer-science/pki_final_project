@@ -52,3 +52,7 @@ function prepareSelectList(json, id) {
 function viewTable() {
     window.location.href = "/view"
 }
+
+function backToHomePage() {
+    window.location.href = "/"
+}
