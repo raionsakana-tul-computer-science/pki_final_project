@@ -22,3 +22,13 @@ FOREIGN KEY
 REFERENCES
 	"post" (post_id)
 ;
+
+INSERT INTO
+	"post" (name, post_code)
+VALUES
+	('Opoczno-1', 26300)
+	, ('Opoczno-2', 26301)
+	, ('Białaczów', 26307)
+	, ('Poświętne pod Pilicą', 26315)
+	, ('Żarnów', 26330)
+;
