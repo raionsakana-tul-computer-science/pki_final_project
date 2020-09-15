@@ -1,6 +1,5 @@
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
-import java.io.Console;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -16,10 +15,7 @@ public class ServerWebSocket {
     public void onOpen(Session session) throws IOException {
         this.connection = databaseTools.getConnection();
         ResultSet resultSet = databaseTools.executeQuery(this.connection, this.getTablesNamesQuery);
-        String response = databaseTools.getJsonResponse(resultSet, "table_name");
-
-        System.out.println(response);
-        session.getBasicRemote().sendText(response);
+        session.getBasicRemote().sendText(TransformationHelper.getJsonResponse(resultSet, "table_name"));
     }
 
 //    @OnMessage
