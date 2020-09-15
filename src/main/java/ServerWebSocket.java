@@ -1,3 +1,6 @@
+import lib.DatabaseTools;
+import lib.TransformationHelper;
+
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
