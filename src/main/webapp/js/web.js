@@ -6,10 +6,10 @@ if (webSocket !== undefined && webSocket.readyState !== WebSocket.CLOSED) {
     showModalResponse("WebSocket aktualnie otwarty.");
 } else {
     // heroku remote
-    // webSocket = new WebSocket("wss://pki-projekt-koncowy.herokuapp.com/echo");
+    webSocket = new WebSocket("wss://pki-project-patryk-janowski.herokuapp.com/app");
 
     // heroku local web
-    webSocket = new WebSocket("ws://localhost:5000/app");
+    // webSocket = new WebSocket("ws://localhost:5000/app");
 }
 
 webSocket.onmessage = function (event) {
@@ -17,7 +17,7 @@ webSocket.onmessage = function (event) {
 
     if (message["type"] === "open") {
         prepareSelectList(message, "table-list")
-    } else if (message["type"] === "eror") {
+    } else if (message["type"] === "error") {
         showModalResponse(message["data"]);
     } else {
         showModalResponse("Wystąpił błąd.");
@@ -47,4 +47,14 @@ function prepareSelectList(json, id) {
     content += "<option value=\"" + obj + "\" selected>" + obj + "</option>";
 
     document.getElementById(id).innerHTML = content;
+}
+
+function viewTable() {
+    var e = document.getElementById("table-list");
+    var value = e.options[e.selectedIndex].value;
+    window.location.href = "/view?table_name=" + value;
+}
+
+function backToHomePage() {
+    window.location.href = "/"
 }

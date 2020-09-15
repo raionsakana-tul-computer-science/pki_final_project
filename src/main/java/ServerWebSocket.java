@@ -1,3 +1,6 @@
+import lib.DatabaseTools;
+import lib.TransformationHelper;
+
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
@@ -19,7 +22,7 @@ public class ServerWebSocket {
     }
 
 //    @OnMessage
-//    public void onMessage(Session session, Message message) throws IOException {
+//    public void onMessage(Session session) throws IOException {
 //        // Handle new messages
 //    }
 //
