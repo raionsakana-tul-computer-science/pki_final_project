@@ -1,5 +1,6 @@
 // jquery
 
+// https://www.tutorialrepublic.com/codelab.php?topic=bootstrap&file=table-with-add-and-delete-row-feature
 $(document).on("click", ".editbtn", function() {
     var tableName = document.getElementById('table-name').placeholder;
     var currentTD = $(this).parents('tr').find('td');
