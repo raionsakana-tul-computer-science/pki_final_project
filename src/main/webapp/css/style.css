@@ -14,7 +14,7 @@ h4 {
     vertical-align: middle;
 }
 
-.table td, .table th {
+.table td, .table th, h1 {
     text-align: center;
     vertical-align: center;
 }

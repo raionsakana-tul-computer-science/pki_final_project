@@ -59,4 +59,18 @@ public class DatabaseTools {
         }
     }
 
+    public int executeUpdate(Connection connection, String query) {
+        int response = -1;
+
+        try {
+            Statement statement = connection.createStatement();
+            response = statement.executeUpdate(query);
+        } catch (SQLException e) {
+            System.out.println("Connection failure.");
+            e.printStackTrace();
+        }
+
+        return response;
+    }
+
 }

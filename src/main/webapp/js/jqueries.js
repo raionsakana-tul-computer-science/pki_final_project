@@ -9,12 +9,10 @@ $(document).on("click", ".editbtn", function() {
 
     if ($(this).html() === 'Edit') {
         currentTD = $(this).parents('tr').find($("td").not(":nth-last-child(1)"));
-
         for (var i = 0; i < currentTD.length; i++) {
             currentTD[i].innerHTML = currentTD[i].textContent + '<input style="display: none;" placeholder="' + currentTD[i].textContent + '"></input>';
         }
 
-        currentTD = $(this).parents('tr').find($("td").not(":nth-child(1), :nth-last-child(1)"));
         $.each(currentTD, function () {
             $(this).prop('contenteditable', true).css({
                 'background':'#b4e7c2',
@@ -70,8 +68,8 @@ $(document).on("click", ".add-new", function() {
     var index = $("table tbody tr:last-child").index();
     var size = document.getElementById("thead_tr").children.length;
 
-    var row = '<tr><td></td>';
-    for (var i = 0; i < size - 2; i++) {
+    var row = '<tr>';
+    for (var i = 0; i < size - 1; i++) {
         row += '<td><input type="text" class="form-control"></td>'
     }
     row += '<td>' + actions + '</td></tr>';

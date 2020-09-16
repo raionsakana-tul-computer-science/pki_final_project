@@ -19,7 +19,9 @@ webSocket.onmessage = function (event) {
         prepareSelectList(message, "table-list")
     } else if (message["type"] === "error") {
         showModalResponse(message["data"]);
-    } else {
+    } else if (message["type"] === "success") {
+        showModalResponse(message["data"]);
+}   else {
         showModalResponse("Wystąpił błąd.");
     }
 };

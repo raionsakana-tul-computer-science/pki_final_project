@@ -1,11 +1,17 @@
 import lib.DatabaseTools;
+import lib.QueryHelper;
 import lib.TransformationHelper;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Map;
 
 // https://www.baeldung.com/java-websockets
 @ServerEndpoint(value = "/app")
@@ -13,6 +19,8 @@ public class ServerWebSocket {
 
     private final DatabaseTools databaseTools = new DatabaseTools();
     private final String getTablesNamesQuery = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'";
+    private final String getColumnTypesQuery = "SELECT * FROM public.";
+    private final String correct = "Operacja udana.";
 
     @OnOpen
     public void onOpen(Session session) throws IOException {
@@ -26,8 +34,28 @@ public class ServerWebSocket {
     }
 
     @OnMessage
-    public void onMessage(Session session, String message) {
-        System.out.println(message);
+    public void onMessage(Session session, String message) throws IOException {
+        try {
+            JSONObject jsonObject = new JSONObject(message);
+            Connection connection = this.databaseTools.getConnection();
+
+            Map<String, String> columnTypes = TransformationHelper.getColumnTypes(this.databaseTools.executeQuery(
+                    connection,
+                    getQuery(jsonObject.getString(QueryHelper.TABLE))
+            ));
+
+            String query = QueryHelper.getQuery(jsonObject, columnTypes);
+            System.out.println(query);
+
+            Integer response = this.databaseTools.executeUpdate(connection,query);
+
+            this.databaseTools.closeConnection(connection);
+            session.getBasicRemote().sendText(String.format(TransformationHelper.response, "success", correct));
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            session.getBasicRemote().sendText(String.format(TransformationHelper.errorJson, e));
+        }
     }
 
     @OnClose
@@ -44,4 +72,9 @@ public class ServerWebSocket {
             e.printStackTrace();
         }
     }
+
+    private String getQuery(String parameter) {
+        return this.getColumnTypesQuery + parameter + ";";
+    }
+
 }

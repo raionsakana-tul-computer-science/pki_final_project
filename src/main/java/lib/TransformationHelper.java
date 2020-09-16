@@ -4,13 +4,16 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TransformationHelper {
 
     private static final String error = "Wystapil blad w polaczeniu z baza danych, za utrudnienia przepraszamy.";
     private static final String errorHtml = "<div class=\"alert alert-danger\" role=\"alert\">%s</div>";
-    private static final String errorJson = "{\"type\": \"error\", \"data\":\"%s\"}";
+    public static final String errorJson = "{\"type\": \"error\", \"data\":\"%s\"}";
+    public static final String response = "{\"type\": \"%s\", \"data\":\"%s\"}";
 
     private static final String answerJson = "{\"type\": \"open\", \"data\": [%s]}";
     private static final String formatList = "\"%s\",";
@@ -54,6 +57,28 @@ public class TransformationHelper {
         }
 
         return response.toString();
+    }
+
+    public static Map<String, String> getColumnTypes(ResultSet resultSet) {
+        Map<String, String> map = new HashMap<String, String>();
+
+        try {
+            ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+            prepareTableMap(resultSetMetaData, map);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return map;
+    }
+
+    private static void prepareTableMap(ResultSetMetaData resultSetMetaData, Map<String, String> map) throws SQLException {
+        for (int i = 1; i <= resultSetMetaData.getColumnCount(); i++) {
+            String columnName = resultSetMetaData.getColumnName(i);
+            String columnType = resultSetMetaData.getColumnTypeName(i);
+
+            map.put(columnName, columnType);
+        }
     }
 
     private static void prepareTable(StringBuilder response, ResultSet resultSet, ResultSetMetaData resultSetMetaData, List<String> list) throws SQLException {

@@ -13,9 +13,10 @@
 
         <link rel="stylesheet" href="css/style.css">
 
-        <title>${table_name}: PKI - projekt końcowy</title>
+        <title>Tabela: ${table_name} - PKI - projekt końcowy</title>
     </head>
     <body onclose="onClose()">
+        <h1>Tabela: ${table_name}</h1>
         <table class="table table-hover table-striped table-bordered">${table}</table>
         <button type="button" class="btn btn-primary" onclick="backToHomePage()">Powrót do strony głównej</button>
         <button type="button" class="btn btn-secondary add-new">Dodaj nowy rekord</button>
