@@ -32,3 +32,15 @@ webSocket.onmessage = function (event) {
         showModalResponse("Wystąpił błąd.");
     }
 };
+
+webSocket.onopen = function (event) {
+    console.log("Połączono z serwerem.");
+};
+
+webSocket.onclose = function (event) {
+    console.log("Rozłączono z serwerem.");
+};
+
+webSocket.onerror = function (event) {
+    console.error("Błąd w połączeniu z serwerem.");
+};
