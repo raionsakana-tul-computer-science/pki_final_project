@@ -26,8 +26,8 @@ public class TransformationHelper {
     private static final String stopRow = "</tr>\n";
 
     private static final String addButton = "<button type=\"button\" class=\"btn btn-warning addbtn\">Add</button>\n";
-    private static final String editButton = "<button type=\"button\" class=\"btn btn-success editbtn\">Edit</button>";
-    private static final String removeButton = "<button type=\"button\" class=\"btn btn-danger dltbtn\"><i class=\"far fa-trash-alt\"></i></button>";
+    private static final String editButton = "<button type=\"button\" class=\"btn btn-success editbtn\">Edit</button>\n";
+    private static final String removeButton = "<button type=\"button\" class=\"btn btn-danger dltbtn\"><i class=\"far fa-trash-alt\"></i></button>\n";
 
     public static String getJsonResponse(ResultSet resultSet, String columnName) {
         StringBuilder response = new StringBuilder();
