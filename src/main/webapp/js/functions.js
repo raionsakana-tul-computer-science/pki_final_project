@@ -60,8 +60,8 @@ function prepareJsonFromPlaceholder(names, input) {
     return text + "}";
 }
 
-function prepareRequest(json, type) {
-    return "{\"type\": \"" + type + "\", \"data\": " + json + "}";
+function prepareRequest(json, type, table) {
+    return "{\"type\": \"" + type + "\", \"table\": \"" + table + "\", \"data\": " + json + "}";
 }
 
 function prepareList(old, new_) {

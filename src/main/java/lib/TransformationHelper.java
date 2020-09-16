@@ -21,6 +21,7 @@ public class TransformationHelper {
 
     private static final String rowHeader = "<th scope=\"col\">%s</th>\n";
     private static final String row = "<td>%s</td>\n";
+    private static final String tableName = "<input style=\"display: none;\" id=\"table-name\" placeholder=\"%s\"></input>\n";
 
     private static final String startRow = "<tr>\n";
     private static final String stopRow = "</tr>\n";
@@ -57,6 +58,8 @@ public class TransformationHelper {
 
     private static void prepareTable(StringBuilder response, ResultSet resultSet, ResultSetMetaData resultSetMetaData, List<String> list) throws SQLException {
         response.append(startHeader);
+        response.append(String.format(tableName, resultSetMetaData.getTableName(1)));
+
         prepareHeader(resultSetMetaData, response, list);
         response.append(HeaderToBody);
 

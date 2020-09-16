@@ -1,8 +1,10 @@
 // jquery
 
 $(document).on("click", ".editbtn", function() {
+    var tableName = document.getElementById('table-name').placeholder;
     var currentTD = $(this).parents('tr').find('td');
     var names = document.getElementById("thead_tr");
+
     var old, new_, out;
 
     if ($(this).html() === 'Edit') {
@@ -37,21 +39,22 @@ $(document).on("click", ".editbtn", function() {
 
         if (old !== new_) {
             out = prepareList(old, new_)
-            out = prepareRequest(out, "update")
+            out = prepareRequest(out, "update", tableName)
             webSocket.send(out);
         }
     }
 
     $(this).html($(this).html() === 'Edit' ? 'Save' : 'Edit');
-
 });
 
 $(document).on("click", ".dltbtn", function() {
+    var tableName = document.getElementById('table-name').placeholder;
+
     var input = $(this).parents("tr").find('td');
     var names = document.getElementById("thead_tr");
 
     var out = prepareJson(names, input)
-    out = prepareRequest(out, "delete")
+    out = prepareRequest(out, "delete", tableName)
 
     $(this).parents("tr").remove();
     $(".add-new").removeAttr("disabled");
@@ -78,11 +81,13 @@ $(document).on("click", ".add-new", function() {
 });
 
 
-$(document).on("click", ".addbtn", function(){
+$(document).on("click", ".addbtn", function() {
+    var tableName = document.getElementById('table-name').placeholder;
+
     var empty = false;
     var input = $(this).parents("tr").find('input[type="text"]');
 
-    input.each(function(){
+    input.each(function() {
         if (!$(this).val()) {
             empty = true;
         }
@@ -96,12 +101,11 @@ $(document).on("click", ".addbtn", function(){
         var input = $(this).parents("tr").find('td');
         var names = document.getElementById("thead_tr");
         var out = prepareJson(names, input)
-        out = prepareRequest(out, "add")
+        out = prepareRequest(out, "add", tableName)
 
         $(this).parents("tr").find(".addbtn, .editbtn").toggle();
         $(".add-new").removeAttr("disabled");
 
         webSocket.send(out);
     }
-
 });
