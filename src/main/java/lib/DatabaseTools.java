@@ -59,9 +59,9 @@ public class DatabaseTools {
         }
     }
 
-    public int executeUpdate(Connection connection, String query) throws SQLException {
+    public void executeUpdate(Connection connection, String query) throws SQLException {
         Statement statement = connection.createStatement();
-        return statement.executeUpdate(query);
+        statement.executeUpdate(query);
     }
 
 }
