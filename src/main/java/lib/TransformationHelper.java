@@ -15,7 +15,7 @@ public class TransformationHelper {
     private static final String answerJson = "{\"type\": \"open\", \"data\": [%s]}";
     private static final String formatList = "\"%s\",";
 
-    private static final String startHeader = "<thead>\n<tr>\n";
+    private static final String startHeader = "<thead>\n<tr id=\"thead_tr\">\n";
     private static final String HeaderToBody = "</tr>\n</thead>\n<tbody>\n";
     private static final String stopBody = "</tbody>\n";
 
@@ -24,6 +24,10 @@ public class TransformationHelper {
 
     private static final String startRow = "<tr>\n";
     private static final String stopRow = "</tr>\n";
+
+    private static final String addButton = "<button type=\"button\" class=\"btn btn-warning addbtn\">Add</button>\n";
+    private static final String editButton = "<button type=\"button\" class=\"btn btn-success editbtn\">Edit</button>";
+    private static final String removeButton = "<button type=\"button\" class=\"btn btn-danger dltbtn\"><i class=\"far fa-trash-alt\"></i></button>";
 
     public static String getJsonResponse(ResultSet resultSet, String columnName) {
         StringBuilder response = new StringBuilder();
@@ -66,6 +70,8 @@ public class TransformationHelper {
             response.append(String.format(rowHeader, columnName));
             list.add(columnName);
         }
+
+        response.append(String.format(rowHeader, "Opcje"));
     }
 
     private static void prepareRows(ResultSet resultSet, StringBuilder response, List<String> list) throws SQLException {
@@ -76,6 +82,7 @@ public class TransformationHelper {
                 response.append(String.format(row, resultSet.getString(column)));
             }
 
+            response.append(String.format(row, getButtons()));
             response.append(stopRow);
         }
     }
@@ -94,7 +101,12 @@ public class TransformationHelper {
         return str;
     }
 
+    // https://getbootstrap.com/docs/4.0/components/alerts/
     private static String getErrorMessage() {
         return String.format(errorHtml, error);
+    }
+
+    private static String getButtons() {
+        return addButton + editButton + removeButton;
     }
 }
