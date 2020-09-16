@@ -22,9 +22,7 @@ public class ViewServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String parameter = request.getParameter(this.tableName);
-
-        Connection connection = databaseTools.getConnection();
-        String out = TransformationHelper.getTable(databaseTools.executeQuery(connection, getQuery(parameter)));
+        String out = getResponse(parameter);
 
         request.setAttribute(this.tableName, parameter);
         request.setAttribute("table", out);
@@ -33,6 +31,14 @@ public class ViewServlet extends HttpServlet {
 
     private String getQuery(String parameter) {
         return this.query + parameter + ";";
+    }
+
+    private String getResponse(String parameter) {
+        Connection connection = this.databaseTools.getConnection();
+        String out = TransformationHelper.getTable(this.databaseTools.executeQuery(connection, getQuery(parameter)));
+        this.databaseTools.closeConnection(connection);
+
+        return out;
     }
 
 }

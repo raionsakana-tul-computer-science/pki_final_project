@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS "user"
 (
- "user_id"    SERIAL PRIMARY KEY,
+ "user_id"    INT PRIMARY KEY,
  "name"       VARCHAR(50) NOT NULL,
  "last_name"  VARCHAR(50) NOT NULL,
  "post_id"    INT NOT NULL
@@ -34,11 +34,11 @@ VALUES
 ;
 
 INSERT INTO
-	"user" (name, last_name, post_id)
+	"user" (user_id, name, last_name, post_id)
 VALUES
-	('Patryk', 'Janowski', 1)
-	, ('Adam', 'Michalak', 3)
-	, ('Eliza', 'Faust', 2)
-	, ('Stefania', 'Górzyńska', 2)
-	, ('Kazimiera', 'Kratka', 4)
+	(1, 'Patryk', 'Janowski', 1)
+	, (2, 'Adam', 'Michalak', 3)
+	, (3, 'Eliza', 'Faust', 2)
+	, (4, 'Stefania', 'Górzyńska', 2)
+	, (5, 'Kazimiera', 'Kratka', 4)
 ;

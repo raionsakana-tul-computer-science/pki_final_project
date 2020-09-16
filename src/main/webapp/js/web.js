@@ -1,6 +1,11 @@
 // websocket
 
 let webSocket;
+var tableBackup;
+
+if (document.getElementById('table-reload') !== null) {
+    tableBackup = document.getElementById('table-reload').innerHTML;
+}
 
 if (webSocket !== undefined && webSocket.readyState !== WebSocket.CLOSED) {
     showModalResponse("WebSocket aktualnie otwarty.");
@@ -19,42 +24,11 @@ webSocket.onmessage = function (event) {
         prepareSelectList(message, "table-list")
     } else if (message["type"] === "error") {
         showModalResponse(message["data"]);
-    } else {
+        document.getElementById("table-reload").innerHTML = tableBackup;
+    } else if (message["type"] === "success") {
+        showModalResponse(message["data"]);
+        tableBackup = document.getElementById('table-reload').innerHTML;
+    }   else {
         showModalResponse("Wystąpił błąd.");
     }
 };
-
-
-// Functions
-
-function showModalResponse(text) {
-    document.getElementById("insert-modal").innerHTML = text;
-
-    $('#alert-modal').modal({
-        show: true
-    })
-}
-
-function prepareSelectList(json, id) {
-    var obj, content = "", size = json["data"].length, i;
-
-    for (i = 0; i < size - 1; i++) {
-        obj = json["data"][i];
-        content += "<option value=\"" + obj + "\">" + obj + "</option>";
-    }
-
-    obj = json["data"][size - 1]
-    content += "<option value=\"" + obj + "\" selected>" + obj + "</option>";
-
-    document.getElementById(id).innerHTML = content;
-}
-
-function viewTable() {
-    var e = document.getElementById("table-list");
-    var value = e.options[e.selectedIndex].value;
-    window.location.href = "/view?table_name=" + value;
-}
-
-function backToHomePage() {
-    window.location.href = "/"
-}
