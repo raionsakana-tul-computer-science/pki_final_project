@@ -31,5 +31,9 @@ function viewTable() {
 }
 
 function backToHomePage() {
-    window.location.href = "/"
+    window.location.href = "/";
+}
+
+function onClose() {
+    webSocket.close();
 }

@@ -13,7 +13,7 @@
 
         <title>${table_name}: PKI - projekt końcowy</title>
     </head>
-    <body>
+    <body onclose="onClose()">
         <table class="table table-hover table-striped table-bordered">${table}</table>
         <button type="button" class="btn btn-primary" onclick="backToHomePage()">Powrót do strony głównej</button>
         <button type="button" class="btn btn-secondary add-new">Dodaj nowy rekord</button>

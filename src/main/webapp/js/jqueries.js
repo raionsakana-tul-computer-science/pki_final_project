@@ -8,7 +8,7 @@ $(document).on("click", ".editbtn", function() {
 
         $.each(currentTD, function () {
             $(this).prop('contenteditable', true).css({
-                'background':'#B4E7E3',
+                'background':'#b4e7c2',
                 'color':'#000'
             })
         });
