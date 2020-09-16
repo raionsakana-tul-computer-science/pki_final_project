@@ -21,7 +21,9 @@ function prepareSelectList(json, id) {
     obj = json["data"][size - 1]
     content += "<option value=\"" + obj + "\" selected>" + obj + "</option>";
 
-    document.getElementById(id).innerHTML = content;
+    if (document.getElementById(id) !== null) {
+        document.getElementById(id).innerHTML = content;
+    }
 }
 
 function viewTable() {

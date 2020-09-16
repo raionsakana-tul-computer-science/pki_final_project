@@ -1,5 +1,6 @@
 package lib;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.Iterator;
@@ -17,7 +18,7 @@ public class QueryHelper {
 
     private static final String queryInsert = "INSERT INTO \"%s\" (%s) VALUES (%s);";
     private static final String queryDelete = "DELETE FROM \"%s\" WHERE %s;";
-    private static final String queryUpdate = "UPDATE TABLE \"%s\" SET %s WHERE %s;";
+    private static final String queryUpdate = "UPDATE \"%s\" SET %s WHERE %s;";
 
     private static final String[] numericTypes = new String[] { "bit", "serial", "int", "bool", "float", "double", "numeric" };
     private static final String[] stringTypes = new String[] { "char", "time", "date", "text" };
@@ -38,7 +39,32 @@ public class QueryHelper {
     }
 
     public static String getUpdateQuery(JSONObject jsonObject, Map<String, String> columnTypes) {
-        return "";
+        StringBuilder conditionsStringBuilder = new StringBuilder();
+        StringBuilder setStringBuilder = new StringBuilder();
+
+        String table = jsonObject.getString(TABLE);
+        JSONArray jsonArray = jsonObject.getJSONArray(DATA);
+        JSONObject temp = jsonArray.getJSONObject(0);
+
+        for (Iterator<String> it = temp.keys(); it.hasNext(); ) {
+            String key = it.next();
+            String value = temp.getString(key);
+            value = adjustValue(key, value, columnTypes);
+            conditionsStringBuilder.append(key).append("=").append(value).append(" and ");
+        }
+
+        temp = jsonArray.getJSONObject(1);
+        for (Iterator<String> it = temp.keys(); it.hasNext(); ) {
+            String key = it.next();
+            String value = temp.getString(key);
+            value = adjustValue(key, value, columnTypes);
+            setStringBuilder.append(key).append("=").append(value).append(",");
+        }
+
+        String conditions = cutLastAnd(conditionsStringBuilder.toString());
+        String sets = cutString(setStringBuilder.toString());
+
+        return String.format(queryUpdate, table, sets, conditions);
     }
 
     public static String getDeleteQuery(JSONObject jsonObject, Map<String, String> columnTypes) {

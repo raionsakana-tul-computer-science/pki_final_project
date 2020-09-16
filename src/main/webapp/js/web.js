@@ -1,16 +1,20 @@
 // websocket
 
 let webSocket;
-var tableBackup = document.getElementById('table-reload').innerHTML;
+var tableBackup;
+
+if (document.getElementById('table-reload') !== null) {
+    tableBackup = document.getElementById('table-reload').innerHTML;
+}
 
 if (webSocket !== undefined && webSocket.readyState !== WebSocket.CLOSED) {
     showModalResponse("WebSocket aktualnie otwarty.");
 } else {
     // heroku remote
-    // webSocket = new WebSocket("wss://pki-project-patryk-janowski.herokuapp.com/app");
+    webSocket = new WebSocket("wss://pki-project-patryk-janowski.herokuapp.com/app");
 
     // heroku local web
-    webSocket = new WebSocket("ws://localhost:5000/app");
+    // webSocket = new WebSocket("ws://localhost:5000/app");
 }
 
 webSocket.onmessage = function (event) {

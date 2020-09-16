@@ -56,13 +56,7 @@ public class ServerWebSocket {
             session.getBasicRemote().sendText(String.format(TransformationHelper.response, "success", correct));
         } catch (JSONException | SQLException e) {
             e.printStackTrace();
-            String out = String.format(
-                    TransformationHelper.errorJson,
-                    e.toString().replaceAll("\"", "'")
-            ).replaceAll("\n", "\\n");
-
-            System.out.println(out);
-            session.getBasicRemote().sendText(out);
+            session.getBasicRemote().sendText(getError(e));
         }
     }
 
@@ -83,6 +77,13 @@ public class ServerWebSocket {
 
     private String getQuery(String parameter) {
         return this.getColumnTypesQuery + parameter + ";";
+    }
+
+    private String getError(Exception e) {
+        return String.format(
+                TransformationHelper.errorJson,
+                e.toString().replaceAll("\"", "'")
+        ).replaceAll("\n", "\\n");
     }
 
 }
