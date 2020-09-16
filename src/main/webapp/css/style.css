@@ -14,6 +14,11 @@ h4 {
     vertical-align: middle;
 }
 
+.table td, .table th {
+    text-align: center;
+    vertical-align: center;
+}
+
 .btn {
     margin-right: .25rem;
     min-width: 60px;

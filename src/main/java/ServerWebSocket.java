@@ -25,18 +25,23 @@ public class ServerWebSocket {
         session.getBasicRemote().sendText(response);
     }
 
-//    @OnMessage
-//    public void onMessage(Session session) throws IOException {
-//        // Handle new messages
-//    }
-//
-//    @OnClose
-//    public void onClose(Session session) throws IOException {
-//        // WebSocket connection closes
-//    }
-//
-//    @OnError
-//    public void onError(Session session, Throwable throwable) {
-//        // Do error handling here
-//    }
+    @OnMessage
+    public void onMessage(Session session, String message) {
+        System.out.println(message);
+    }
+
+    @OnClose
+    public void onClose(Session session) {
+        System.out.println("Connection with client closed.");
+    }
+
+    @OnError
+    public void onError(Session session, Throwable throwable) {
+        try {
+            session.close();
+        } catch (IOException e) {
+            System.out.println("Error occurred.");
+            e.printStackTrace();
+        }
+    }
 }

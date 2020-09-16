@@ -37,3 +37,33 @@ function backToHomePage() {
 function onClose() {
     webSocket.close();
 }
+
+function prepareJson(names, input) {
+    var text = "{";
+
+    for (var i = 0; i < names.children.length - 1; i++) {
+        text += "\"" + names.children[i].textContent + "\": \"" + input[i].textContent + "\", ";
+    }
+
+    text = text.substring(0, text.length - 2);
+    return text + "}";
+}
+
+function prepareJsonFromPlaceholder(names, input) {
+    var text = "{";
+
+    for (var i = 0; i < names.children.length - 1; i++) {
+        text += "\"" + names.children[i].textContent + "\": \"" + input[i].placeholder + "\", ";
+    }
+
+    text = text.substring(0, text.length - 2);
+    return text + "}";
+}
+
+function prepareRequest(json, type) {
+    return "{\"type\": \"" + type + "\", \"data\": " + json + "}";
+}
+
+function prepareList(old, new_) {
+    return "[" + old + ", " + new_ + "]";
+}
