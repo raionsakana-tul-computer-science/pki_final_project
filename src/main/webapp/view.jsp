@@ -17,7 +17,9 @@
     </head>
     <body onclose="onClose()">
         <h1>Tabela: ${table_name}</h1>
-        <table class="table table-hover table-striped table-bordered">${table}</table>
+        <div id="table-reload">
+            <table class="table table-hover table-striped table-bordered">${table}</table>
+        </div>
         <button type="button" class="btn btn-primary" onclick="backToHomePage()">Powrót do strony głównej</button>
         <button type="button" class="btn btn-secondary add-new">Dodaj nowy rekord</button>
 

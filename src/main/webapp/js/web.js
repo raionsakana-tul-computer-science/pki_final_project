@@ -1,6 +1,7 @@
 // websocket
 
 let webSocket;
+var tableBackup = document.getElementById('table-reload').innerHTML;
 
 if (webSocket !== undefined && webSocket.readyState !== WebSocket.CLOSED) {
     showModalResponse("WebSocket aktualnie otwarty.");
@@ -19,9 +20,11 @@ webSocket.onmessage = function (event) {
         prepareSelectList(message, "table-list")
     } else if (message["type"] === "error") {
         showModalResponse(message["data"]);
+        document.getElementById("table-reload").innerHTML = tableBackup;
     } else if (message["type"] === "success") {
         showModalResponse(message["data"]);
-}   else {
+        tableBackup = document.getElementById('table-reload').innerHTML;
+    }   else {
         showModalResponse("Wystąpił błąd.");
     }
 };

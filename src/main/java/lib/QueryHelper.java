@@ -25,12 +25,13 @@ public class QueryHelper {
     public static String getQuery(JSONObject jsonObject, Map<String, String> columnTypes) {
         String key = jsonObject.getString(TYPE);
 
-        if (key.equals(UPDATE)) {
-            return getUpdateQuery(jsonObject, columnTypes);
-        } else if (key.equals(DELETE)) {
-            return getDeleteQuery(jsonObject, columnTypes);
-        } else if (key.equals(ADD)) {
-            return getAddQuery(jsonObject, columnTypes);
+        switch (key) {
+            case UPDATE:
+                return getUpdateQuery(jsonObject, columnTypes);
+            case DELETE:
+                return getDeleteQuery(jsonObject, columnTypes);
+            case ADD:
+                return getAddQuery(jsonObject, columnTypes);
         }
 
         return "";
@@ -41,7 +42,20 @@ public class QueryHelper {
     }
 
     public static String getDeleteQuery(JSONObject jsonObject, Map<String, String> columnTypes) {
-        return "";
+        StringBuilder stringBuilder = new StringBuilder();
+
+        String table = jsonObject.getString(TABLE);
+        JSONObject columns = jsonObject.getJSONObject(DATA);
+
+        for (Iterator<String> it = columns.keys(); it.hasNext(); ) {
+            String key = it.next();
+            String value = columns.getString(key);
+            value = adjustValue(key, value, columnTypes);
+            stringBuilder.append(key).append("=").append(value).append(" and ");
+        }
+
+        String output = cutLastAnd(stringBuilder.toString());
+        return String.format(queryDelete, table, output);
     }
 
     public static String getAddQuery(JSONObject jsonObject, Map<String, String> columnTypes) {
@@ -73,11 +87,18 @@ public class QueryHelper {
         return str;
     }
 
+    private static String cutLastAnd(String str) {
+        if (str != null && str.length() > 0) {
+            str = str.substring(0, str.length() - 5);
+        }
+        return str;
+    }
+
     private static String adjustValue(String columnName, String value, Map<String, String> columnTypes) {
         String type = columnTypes.get(columnName);
 
         if (checkType(type, stringTypes)) {
-            return "\'" + value + "\'";
+            return "'" + value + "'";
         }
 
         if (checkType(type, numericTypes)) {

@@ -3,12 +3,15 @@ import lib.QueryHelper;
 import lib.TransformationHelper;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.postgresql.util.PSQLException;
 
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
+import java.io.Console;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,14 +50,19 @@ public class ServerWebSocket {
             String query = QueryHelper.getQuery(jsonObject, columnTypes);
             System.out.println(query);
 
-            Integer response = this.databaseTools.executeUpdate(connection,query);
-
+            this.databaseTools.executeUpdate(connection,query);
             this.databaseTools.closeConnection(connection);
-            session.getBasicRemote().sendText(String.format(TransformationHelper.response, "success", correct));
 
-        } catch (JSONException e) {
+            session.getBasicRemote().sendText(String.format(TransformationHelper.response, "success", correct));
+        } catch (JSONException | SQLException e) {
             e.printStackTrace();
-            session.getBasicRemote().sendText(String.format(TransformationHelper.errorJson, e));
+            String out = String.format(
+                    TransformationHelper.errorJson,
+                    e.toString().replaceAll("\"", "'")
+            ).replaceAll("\n", "\\n");
+
+            System.out.println(out);
+            session.getBasicRemote().sendText(out);
         }
     }
 
