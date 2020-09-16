@@ -44,22 +44,12 @@ public class QueryHelper {
 
         String table = jsonObject.getString(TABLE);
         JSONArray jsonArray = jsonObject.getJSONArray(DATA);
-        JSONObject temp = jsonArray.getJSONObject(0);
 
-        for (Iterator<String> it = temp.keys(); it.hasNext(); ) {
-            String key = it.next();
-            String value = temp.getString(key);
-            value = adjustValue(key, value, columnTypes);
-            conditionsStringBuilder.append(key).append("=").append(value).append(" and ");
-        }
+        JSONObject temp = jsonArray.getJSONObject(0);
+        getQueryBody(temp, conditionsStringBuilder, columnTypes, " and ");
 
         temp = jsonArray.getJSONObject(1);
-        for (Iterator<String> it = temp.keys(); it.hasNext(); ) {
-            String key = it.next();
-            String value = temp.getString(key);
-            value = adjustValue(key, value, columnTypes);
-            setStringBuilder.append(key).append("=").append(value).append(",");
-        }
+        getQueryBody(temp, setStringBuilder, columnTypes, ",");
 
         String conditions = cutLastAnd(conditionsStringBuilder.toString());
         String sets = cutString(setStringBuilder.toString());
@@ -73,14 +63,9 @@ public class QueryHelper {
         String table = jsonObject.getString(TABLE);
         JSONObject columns = jsonObject.getJSONObject(DATA);
 
-        for (Iterator<String> it = columns.keys(); it.hasNext(); ) {
-            String key = it.next();
-            String value = columns.getString(key);
-            value = adjustValue(key, value, columnTypes);
-            stringBuilder.append(key).append("=").append(value).append(" and ");
-        }
-
+        getQueryBody(columns, stringBuilder, columnTypes, " and ");
         String output = cutLastAnd(stringBuilder.toString());
+
         return String.format(queryDelete, table, output);
     }
 
@@ -91,19 +76,33 @@ public class QueryHelper {
         String table = jsonObject.getString(TABLE);
         JSONObject columns = jsonObject.getJSONObject(DATA);
 
-        for (Iterator<String> it = columns.keys(); it.hasNext(); ) {
-            String key = it.next();
-            String value = columns.getString(key);
-            value = adjustValue(key, value, columnTypes);
-
-            columnsStringBuilder.append(key).append(",");
-            valuesStringBuilder.append(value).append(",");
-        }
-
+        prepareQueryData(columns, columnsStringBuilder, valuesStringBuilder, columnTypes);
         String columnsString = cutString(columnsStringBuilder.toString());
         String valuesString = cutString(valuesStringBuilder.toString());
 
         return String.format(queryInsert, table, columnsString, valuesString);
+    }
+
+    private static void prepareQueryData(JSONObject jsonObject, StringBuilder stringBuilder1,
+                                         StringBuilder stringBuilder2, Map<String, String> columnTypes) {
+        for (Iterator<String> it = jsonObject.keys(); it.hasNext(); ) {
+            String key = it.next();
+            String value = jsonObject.getString(key);
+            value = adjustValue(key, value, columnTypes);
+
+            stringBuilder1.append(key).append(",");
+            stringBuilder2.append(value).append(",");
+        }
+    }
+
+    private static void getQueryBody(JSONObject jsonObject, StringBuilder stringBuilder, Map<String, String> columnTypes, String connector) {
+        for (Iterator<String> it = jsonObject.keys(); it.hasNext(); ) {
+            String key = it.next();
+            String value = jsonObject.getString(key);
+
+            value = adjustValue(key, value, columnTypes);
+            stringBuilder.append(key).append("=").append(value).append(connector);
+        }
     }
 
     private static String cutString(String str) {

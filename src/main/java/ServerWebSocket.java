@@ -50,7 +50,11 @@ public class ServerWebSocket {
             String query = QueryHelper.getQuery(jsonObject, columnTypes);
             System.out.println(query);
 
-            this.databaseTools.executeUpdate(connection,query);
+            if (query.equals("")) {
+                throw new SQLException("Niewspierana operacja");
+            }
+
+            this.databaseTools.executeUpdate(connection, query);
             this.databaseTools.closeConnection(connection);
 
             session.getBasicRemote().sendText(String.format(TransformationHelper.response, "success", correct));
