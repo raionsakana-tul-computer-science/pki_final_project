@@ -20,16 +20,21 @@ if (webSocket !== undefined && webSocket.readyState !== WebSocket.CLOSED) {
 webSocket.onmessage = function (event) {
     var message = JSON.parse(event.data);
 
-    if (message["type"] === "open") {
-        prepareSelectList(message, "table-list")
-    } else if (message["type"] === "error") {
-        showModalResponse(message["data"]);
-        document.getElementById("table-reload").innerHTML = tableBackup;
-    } else if (message["type"] === "success") {
-        showModalResponse(message["data"]);
-        tableBackup = document.getElementById('table-reload').innerHTML;
-    }   else {
-        showModalResponse("Wystąpił błąd.");
+    switch (message["type"]) {
+        case "open":
+            prepareSelectList(message, "table-list")
+            break;
+        case "error":
+            showModalResponse(message["data"]);
+            document.getElementById("table-reload").innerHTML = tableBackup;
+            break;
+        case "success":
+            showModalResponse(message["data"]);
+            tableBackup = document.getElementById('table-reload').innerHTML;
+            break;
+        default:
+            showModalResponse("Wystąpił błąd.");
+            break;
     }
 };
 

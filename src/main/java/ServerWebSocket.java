@@ -3,17 +3,13 @@ import lib.QueryHelper;
 import lib.TransformationHelper;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.postgresql.util.PSQLException;
 
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
-import java.io.Console;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Dictionary;
-import java.util.HashMap;
 import java.util.Map;
 
 // https://www.baeldung.com/java-websockets
