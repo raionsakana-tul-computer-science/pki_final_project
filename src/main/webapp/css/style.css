@@ -1,0 +1,29 @@
+body {
+    padding: 20px;
+}
+
+.container {
+    padding: 2rem 0rem;
+}
+
+h4 {
+    margin: 2rem 0rem 1rem;
+}
+
+.table-image td, .table-image th {
+    vertical-align: middle;
+}
+
+.table td, .table th, h1 {
+    text-align: center;
+    vertical-align: center;
+}
+
+.btn {
+    margin-right: .25rem;
+    min-width: 60px;
+}
+
+.addbtn {
+    display: none;
+}
